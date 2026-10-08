@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letter For You</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffe6e8 0%, #f3d1df 100%);
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+    }
+
+    /* 信封整体容器 */
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      background-color: #f28b9c;
+      border-radius: 6px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+
+    /* 顶部的盖子 */
+    .lid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 115px solid #f28b9c;
+      transform-origin: top;
+      transition: transform 0.5s ease;
+      z-index: 3;
+    }
+
+    /* 内部信纸 */
+    .letter {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      width: 300px;
+      height: 200px;
+      background: #fffdf9;
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    /* 信件内容初始状态：隐藏 */
+    .letter-title,
+    .letter-content {
+      opacity: 0;
+      transition: opacity 0.4s ease 0.2s; /* 延迟0.2秒显示，效果更自然 */
+    }
+
+    .letter-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #e65c72;
+      margin-bottom: 12px;
+    }
+
+    .letter-content {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* 信封两侧与底部遮罩 */
+    .pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid #f8a1b0;
+      border-right: 160px solid #f8a1b0;
+      border-top: 105px solid transparent;
+      border-bottom: 115px solid #e07385;
+      border-radius: 0 0 6px 6px;
+      z-index: 4;
+    }
+
+    /* 点击第1次：掀开盖子 */
+    .envelope-wrapper.step-1 .lid {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    /* 点击第2次：抽出信纸，并显示文字 */
+    .envelope-wrapper.step-2 .letter {
+      transform: translateY(-130px);
+      height: 240px;
+      z-index: 5;
+    }
+
+    .envelope-wrapper.step-2 .letter-title,
+    .envelope-wrapper.step-2 .letter-content {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="envelope-wrapper" id="envelope">
+    <div class="lid"></div>
+    <div class="letter">
+      <div class="letter-title">To My Friend:</div>
+      <div class="letter-content">
+        这是一封写给你的信。<br>
+        全世界那么多人，偏偏让我遇到你这个笨蛋♥
+      </div>
+    </div>
+    <div class="pocket"></div>
+  </div>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    let step = 0;
+
+    envelope.addEventListener('click', () => {
+      step++;
+      if (step === 1) {
+        envelope.classList.add('step-1'); // 第1次点击：仅翻开盖子
+      } else if (step === 2) {
+        envelope.classList.add('step-2'); // 第2次点击：抽出信纸并显现文字
+      } else {
+        // 第3次点击：重置回初始状态（关闭）
+        envelope.classList.remove('step-1', 'step-2');
+        step = 0;
+      }
+    });
+  </script>
+
+</body>
+</html>
